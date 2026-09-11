@@ -6,17 +6,16 @@
 package main
 
 import (
+	"entrytest/internal/config"
 	"log"
 	"net/http"
-	"os"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8080"
+	cfg, err := config.CreateConfig()
+	if err != nil {
+		log.Fatal("Can't create config: ", err.Error())
 	}
-
 	mux := http.NewServeMux()
 
 	// Панель из frontend/. Каталог берётся относительно рабочего, поэтому
@@ -30,6 +29,6 @@ func main() {
 	// TODO Этап 5: GET /messages         -> все сообщения, новые сверху
 	// TODO Этап 6: DELETE /messages/{id} -> 204, либо 404 если такого нет
 
-	log.Printf("сервер слушает http://localhost:%s", port)
-	log.Fatal(http.ListenAndServe(":"+port, mux))
+	log.Printf("сервер слушает http://localhost:%s", cfg.Server.Port)
+	log.Fatal(http.ListenAndServe(":"+cfg.Server.Port, mux))
 }
