@@ -16,7 +16,7 @@ type response struct {
 func (s *MessagesServer) Messages(w http.ResponseWriter, r *http.Request) {
 	var err error
 	m := service.Message{}
-	if err = json.NewDecoder(r.Body).Decode(&m); err != nil {
+	if err = json.NewDecoder(r.Body).Decode(&m); err != nil || len(m.Message) == 0 { // use validation pkg
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
