@@ -23,9 +23,9 @@ func NewMessagesServer(service MessagesService, port string) *MessagesServer {
 	server := &MessagesServer{messagesService: service}
 
 	mux := http.NewServeMux()
-	mux.Handle("/", http.FileServer(http.Dir("frontend")))
-	mux.HandleFunc("/health", server.Healthcheck)
-	mux.HandleFunc("/echo", server.Echo)
+	mux.Handle("GET /", http.FileServer(http.Dir("frontend")))
+	mux.HandleFunc("GET /health", server.Healthcheck)
+	mux.HandleFunc("POST /echo", server.Echo)
 
 	httpServer := http.Server{
 		Addr:    ":" + port,
