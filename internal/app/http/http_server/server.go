@@ -6,6 +6,8 @@ import (
 
 type MessagesService interface {
 	IsAlive() bool
+	EchoRaw([]byte) []byte
+	EchoJSON([]byte) ([]byte, error)
 }
 
 type MessagesServer struct {
@@ -23,6 +25,7 @@ func NewMessagesServer(service MessagesService, port string) *MessagesServer {
 	mux := http.NewServeMux()
 	mux.Handle("/", http.FileServer(http.Dir("frontend")))
 	mux.HandleFunc("/health", server.Healthcheck)
+	mux.HandleFunc("/echo", server.Echo)
 
 	httpServer := http.Server{
 		Addr:    ":" + port,
