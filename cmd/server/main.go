@@ -6,9 +6,10 @@
 package main
 
 import (
+	"entrytest/internal/app/http/http_server"
 	"entrytest/internal/config"
+	"entrytest/internal/service"
 	"log"
-	"net/http"
 )
 
 func main() {
@@ -16,11 +17,6 @@ func main() {
 	if err != nil {
 		log.Fatal("Can't create config: ", err.Error())
 	}
-	mux := http.NewServeMux()
-
-	// Панель из frontend/. Каталог берётся относительно рабочего, поэтому
-	// запускайте из корня модуля: go run ./cmd/server
-	mux.Handle("/", http.FileServer(http.Dir("frontend")))
 
 	// TODO Этап 1: GET /health           -> 200, тело "ok"
 	// TODO Этап 2: POST /echo            -> тело запроса без изменений
@@ -29,6 +25,9 @@ func main() {
 	// TODO Этап 5: GET /messages         -> все сообщения, новые сверху
 	// TODO Этап 6: DELETE /messages/{id} -> 204, либо 404 если такого нет
 
+	service := service.NewMessagesService()
+	server := http_server.NewMessagesServer(service, cfg.Server.Port)
+
 	log.Printf("сервер слушает http://localhost:%s", cfg.Server.Port)
-	log.Fatal(http.ListenAndServe(":"+cfg.Server.Port, mux))
+	log.Fatal(server.ListenAndServe())
 }
