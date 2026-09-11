@@ -1,6 +1,8 @@
 package http_server
 
 import (
+	"encoding/json"
+	"entrytest/internal/service"
 	"io"
 	"log"
 	"net/http"
@@ -21,9 +23,21 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 		echo = s.messagesService.EchoRaw(body)
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json")
-		echo, err = s.messagesService.EchoJSON(body)
+
+		m := service.Message{}
+		err := json.Unmarshal(body, &m)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		text := s.messagesService.EchoJSON(m)
+		echo, err = json.Marshal(service.Message{
+			Message: text,
+		})
+		if err != nil {
+			log.Println("cant Marshall response", err.Error())
+			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
 	default:

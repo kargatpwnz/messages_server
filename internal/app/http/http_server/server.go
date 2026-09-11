@@ -9,7 +9,7 @@ import (
 type MessagesService interface {
 	IsAlive() bool
 	EchoRaw([]byte) []byte
-	EchoJSON([]byte) ([]byte, error)
+	EchoJSON(service.Message) string
 	Messages(service.Message) (uint64, time.Time)
 }
 
