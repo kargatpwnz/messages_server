@@ -1,13 +1,16 @@
 package http_server
 
 import (
+	"entrytest/internal/service"
 	"net/http"
+	"time"
 )
 
 type MessagesService interface {
 	IsAlive() bool
 	EchoRaw([]byte) []byte
 	EchoJSON([]byte) ([]byte, error)
+	Messages(service.Message) (uint64, time.Time)
 }
 
 type MessagesServer struct {
@@ -26,6 +29,7 @@ func NewMessagesServer(service MessagesService, port string) *MessagesServer {
 	mux.Handle("GET /", http.FileServer(http.Dir("frontend")))
 	mux.HandleFunc("GET /health", server.Healthcheck)
 	mux.HandleFunc("POST /echo", server.Echo)
+	mux.HandleFunc("POST /messages", server.Messages)
 
 	httpServer := http.Server{
 		Addr:    ":" + port,
