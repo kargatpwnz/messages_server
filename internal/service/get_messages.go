@@ -6,7 +6,7 @@ import (
 )
 
 func (s *MessagesService) GetMessages() []model.Message {
-	s.Mutex.Lock()
+	s.Mutex.RLock()
 
 	messages := make([]model.Message, 0, len(s.Storage))
 	for id, message := range s.Storage {
@@ -15,7 +15,7 @@ func (s *MessagesService) GetMessages() []model.Message {
 			Message:   message.Message,
 			CreatedAt: message.CreatedAt})
 	}
-	s.Mutex.Unlock()
+	s.Mutex.RUnlock()
 
 	sort.Slice(messages, func(i, j int) bool {
 		return messages[i].ID > messages[j].ID

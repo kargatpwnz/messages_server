@@ -17,7 +17,7 @@ type (
 type MessagesService struct {
 	Count   atomic.Uint64
 	Storage storage
-	Mutex   sync.Mutex
+	Mutex   sync.RWMutex
 }
 
 func NewMessagesService() *MessagesService {
