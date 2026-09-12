@@ -8,6 +8,10 @@ import (
 	"net/http"
 )
 
+type response struct {
+	Message string `json:"message"`
+}
+
 func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -32,7 +36,7 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 		}
 
 		text := s.messagesService.EchoJSON(m)
-		echo, err = json.Marshal(model.Message{
+		echo, err = json.Marshal(response{
 			Message: text,
 		})
 		if err != nil {
