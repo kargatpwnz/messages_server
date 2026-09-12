@@ -1,6 +1,7 @@
 package http_server
 
 import (
+	"entrytest/internal/model"
 	"entrytest/internal/service"
 	"net/http"
 	"time"
@@ -11,6 +12,7 @@ type MessagesService interface {
 	EchoRaw([]byte) []byte
 	EchoJSON(service.Message) string
 	Messages(service.Message) (uint64, time.Time)
+	GetMessages() []model.Message
 }
 
 type MessagesServer struct {
@@ -30,6 +32,7 @@ func NewMessagesServer(service MessagesService, port string) *MessagesServer {
 	mux.HandleFunc("GET /health", server.Healthcheck)
 	mux.HandleFunc("POST /echo", server.Echo)
 	mux.HandleFunc("POST /messages", server.Messages)
+	mux.HandleFunc("GET /messages", server.GetMessages)
 
 	httpServer := http.Server{
 		Addr:    ":" + port,
