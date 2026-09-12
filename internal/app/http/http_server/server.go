@@ -2,7 +2,6 @@ package http_server
 
 import (
 	"entrytest/internal/model"
-	"entrytest/internal/service"
 	"net/http"
 	"time"
 )
@@ -10,8 +9,8 @@ import (
 type MessagesService interface {
 	IsAlive() bool
 	EchoRaw([]byte) []byte
-	EchoJSON(service.Message) string
-	Messages(service.Message) (uint64, time.Time)
+	EchoJSON(model.Message) string
+	Messages(model.Message) (uint64, time.Time)
 	GetMessages() []model.Message
 	DeleteMessage(uint64) bool
 }

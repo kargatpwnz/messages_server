@@ -2,35 +2,30 @@ package http_server
 
 import (
 	"encoding/json"
-	"entrytest/internal/service"
+	"entrytest/internal/model"
+	"log"
 	"net/http"
-	"time"
 )
-
-type response struct {
-	Id        uint64    `json:"id"`
-	CreatedAt time.Time `json:"created_at"`
-	Message   string    `json:"message"`
-}
 
 func (s *MessagesServer) Messages(w http.ResponseWriter, r *http.Request) {
 	var err error
-	m := service.Message{}
+	m := model.Message{}
 	if err = json.NewDecoder(r.Body).Decode(&m); err != nil || len(m.Message) == 0 { // use validation pkg
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	idx, createdAt := s.messagesService.Messages(m)
-
-	rsp := response{
-		Id:        idx,
+	rsp := model.Message{
+		ID:        idx,
 		CreatedAt: createdAt,
 		Message:   m.Message,
 	}
 
 	bytes, err := json.Marshal(rsp)
 	if err != nil {
+		log.Println("Marshall message err:", err.Error())
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

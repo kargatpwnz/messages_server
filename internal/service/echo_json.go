@@ -1,10 +1,7 @@
 package service
 
-// TODO: move to proper folder
-type Message struct {
-	Message string
-}
+import "entrytest/internal/model"
 
-func (s *MessagesService) EchoJSON(m Message) string {
+func (s *MessagesService) EchoJSON(m model.Message) string {
 	return m.Message
 }

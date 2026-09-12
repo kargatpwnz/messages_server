@@ -11,8 +11,9 @@ func (s *MessagesService) GetMessages() []model.Message {
 	messages := make([]model.Message, 0, len(s.Storage))
 	for id, message := range s.Storage {
 		messages = append(messages, model.Message{
-			ID:      id,
-			Message: message})
+			ID:        id,
+			Message:   message.Message,
+			CreatedAt: message.CreatedAt})
 	}
 	s.Mutex.Unlock()
 

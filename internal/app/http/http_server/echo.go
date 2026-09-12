@@ -2,7 +2,7 @@ package http_server
 
 import (
 	"encoding/json"
-	"entrytest/internal/service"
+	"entrytest/internal/model"
 	"io"
 	"log"
 	"net/http"
@@ -24,7 +24,7 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json")
 
-		m := service.Message{}
+		m := model.Message{}
 		err := json.Unmarshal(body, &m)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
@@ -32,7 +32,7 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 		}
 
 		text := s.messagesService.EchoJSON(m)
-		echo, err = json.Marshal(service.Message{
+		echo, err = json.Marshal(model.Message{
 			Message: text,
 		})
 		if err != nil {
@@ -42,6 +42,7 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 		}
 	default:
 		log.Println("got unknown contentType:", contentType)
+		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 

@@ -3,10 +3,15 @@ package service
 import (
 	"sync"
 	"sync/atomic"
+	"time"
 )
 
+type msg struct {
+	CreatedAt time.Time
+	Message   string
+}
 type (
-	storage map[uint64]string
+	storage map[uint64]msg // probably we can store messages in slice to keep insertion order without extra Sort on GET /messages
 )
 
 type MessagesService struct {
