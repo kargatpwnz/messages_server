@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func (s *MessagesService) Messages(m model.Message) (uint64, time.Time) {
+func (s *MessagesService) PostMessage(m model.Message) (uint64, time.Time) {
 	idx := s.Count.Add(1) - 1
 	s.Mutex.Lock()
 	defer s.Mutex.Unlock()

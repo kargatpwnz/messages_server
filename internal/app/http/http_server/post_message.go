@@ -7,7 +7,7 @@ import (
 	"net/http"
 )
 
-func (s *MessagesServer) Messages(w http.ResponseWriter, r *http.Request) {
+func (s *MessagesServer) PostMessage(w http.ResponseWriter, r *http.Request) {
 	var err error
 	m := model.Message{}
 	if err = json.NewDecoder(r.Body).Decode(&m); err != nil || len(m.Message) == 0 { // use validation pkg
@@ -15,7 +15,7 @@ func (s *MessagesServer) Messages(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	idx, createdAt := s.messagesService.Messages(m)
+	idx, createdAt := s.messagesService.PostMessage(m)
 	rsp := model.Message{
 		ID:        idx,
 		CreatedAt: createdAt,

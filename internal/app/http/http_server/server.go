@@ -10,7 +10,7 @@ type MessagesService interface {
 	IsAlive() bool
 	EchoRaw([]byte) []byte
 	EchoJSON(model.Message) string
-	Messages(model.Message) (uint64, time.Time)
+	PostMessage(model.Message) (uint64, time.Time)
 	GetMessages() []model.Message
 	DeleteMessage(uint64) bool
 }
@@ -31,7 +31,7 @@ func NewMessagesServer(service MessagesService, port string) *MessagesServer {
 	mux.Handle("GET /", http.FileServer(http.Dir("frontend")))
 	mux.HandleFunc("GET /health", server.Healthcheck)
 	mux.HandleFunc("POST /echo", server.Echo)
-	mux.HandleFunc("POST /messages", server.Messages)
+	mux.HandleFunc("POST /messages", server.PostMessage)
 	mux.HandleFunc("GET /messages", server.GetMessages)
 	mux.HandleFunc("DELETE /messages/{id}", server.DeleteMessage)
 
