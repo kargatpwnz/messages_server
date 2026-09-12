@@ -1,16 +1,23 @@
 package service
 
-import "entrytest/internal/model"
+import (
+	"entrytest/internal/model"
+	"sort"
+)
 
 func (s *MessagesService) GetMessages() []model.Message {
-	messages := make([]model.Message, 0, s.Count.Load())
 	s.Mutex.Lock()
-	defer s.Mutex.Unlock()
 
-	for i := s.Count.Load(); i != 0; i-- {
+	messages := make([]model.Message, 0, len(s.Storage))
+	for id, message := range s.Storage {
 		messages = append(messages, model.Message{
-			ID:      i - 1,
-			Message: s.Storage[i-1]})
+			ID:      id,
+			Message: message})
 	}
+	s.Mutex.Unlock()
+
+	sort.Slice(messages, func(i, j int) bool {
+		return messages[i].ID > messages[j].ID
+	})
 	return messages
 }

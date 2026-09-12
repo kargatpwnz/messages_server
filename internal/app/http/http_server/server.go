@@ -13,6 +13,7 @@ type MessagesService interface {
 	EchoJSON(service.Message) string
 	Messages(service.Message) (uint64, time.Time)
 	GetMessages() []model.Message
+	DeleteMessage(uint64) bool
 }
 
 type MessagesServer struct {
@@ -33,6 +34,7 @@ func NewMessagesServer(service MessagesService, port string) *MessagesServer {
 	mux.HandleFunc("POST /echo", server.Echo)
 	mux.HandleFunc("POST /messages", server.Messages)
 	mux.HandleFunc("GET /messages", server.GetMessages)
+	mux.HandleFunc("DELETE /messages/{id}", server.DeleteMessage)
 
 	httpServer := http.Server{
 		Addr:    ":" + port,
