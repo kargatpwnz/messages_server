@@ -16,7 +16,7 @@ type (
 
 type MessagesService struct {
 	Count   atomic.Uint64
-	Storage storage
+	Storage storage // this should be repository interface
 	Mutex   sync.RWMutex
 }
 
