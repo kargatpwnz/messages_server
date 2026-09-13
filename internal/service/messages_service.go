@@ -7,23 +7,23 @@ import (
 )
 
 type msg struct {
-	CreatedAt time.Time
-	Message   string
+	createdAt time.Time
+	message   string
 }
 type (
 	storage map[uint64]msg // probably we can store messages in slice to keep insertion order without extra Sort on GET /messages
 )
 
 type MessagesService struct {
-	Count   atomic.Uint64
-	Storage storage // this should be repository interface
-	Mutex   sync.RWMutex
+	count   atomic.Uint64
+	storage storage // this should be repository interface
+	mutex   sync.RWMutex
 }
 
 func NewMessagesService() *MessagesService {
 	return &MessagesService{
-		Count:   atomic.Uint64{},
-		Storage: make(storage),
+		count:   atomic.Uint64{},
+		storage: make(storage),
 	}
 }
 

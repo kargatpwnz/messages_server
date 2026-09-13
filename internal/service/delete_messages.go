@@ -1,11 +1,11 @@
 package service
 
 func (s *MessagesService) DeleteMessage(id uint64) bool {
-	s.Mutex.Lock()
-	defer s.Mutex.Unlock()
-	_, hasID := s.Storage[id]
+	s.mutex.Lock()
+	defer s.mutex.Unlock()
+	_, hasID := s.storage[id]
 	if hasID {
-		delete(s.Storage, id)
+		delete(s.storage, id)
 	}
 	return hasID
 }

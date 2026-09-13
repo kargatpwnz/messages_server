@@ -6,16 +6,16 @@ import (
 )
 
 func (s *MessagesService) GetMessages() []model.Message {
-	s.Mutex.RLock()
+	s.mutex.RLock()
 
-	messages := make([]model.Message, 0, len(s.Storage))
-	for id, message := range s.Storage {
+	messages := make([]model.Message, 0, len(s.storage))
+	for id, message := range s.storage {
 		messages = append(messages, model.Message{
 			ID:        id,
-			Message:   message.Message,
-			CreatedAt: message.CreatedAt})
+			Message:   message.message,
+			CreatedAt: message.createdAt})
 	}
-	s.Mutex.RUnlock()
+	s.mutex.RUnlock()
 
 	sort.Slice(messages, func(i, j int) bool {
 		return messages[i].ID > messages[j].ID
