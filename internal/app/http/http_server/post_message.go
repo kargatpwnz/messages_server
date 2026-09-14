@@ -7,13 +7,9 @@ import (
 	"net/http"
 )
 
-type postRequest struct {
-	Message string `json:"message"`
-}
-
 func (s *MessagesServer) PostMessage(w http.ResponseWriter, r *http.Request) {
 	var err error
-	req := postRequest{}
+	req := message{}
 	if err = json.NewDecoder(r.Body).Decode(&req); err != nil || len(req.Message) == 0 { // use validation pkg
 		w.WriteHeader(http.StatusBadRequest)
 		return

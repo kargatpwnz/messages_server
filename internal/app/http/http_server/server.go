@@ -9,7 +9,7 @@ import (
 type MessagesService interface {
 	IsAlive() bool
 	EchoRaw([]byte) []byte
-	EchoJSON(model.Message) string
+	EchoJSON(string) string
 	PostMessage(string) (uint64, time.Time)
 	GetMessages() []model.Message
 	DeleteMessage(uint64) bool

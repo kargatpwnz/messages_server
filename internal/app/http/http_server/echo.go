@@ -2,13 +2,12 @@ package http_server
 
 import (
 	"encoding/json"
-	"entrytest/internal/model"
 	"io"
 	"log"
 	"net/http"
 )
 
-type response struct {
+type message struct {
 	Message string `json:"message"`
 }
 
@@ -28,15 +27,15 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 	case "application/json":
 		w.Header().Set("Content-Type", "application/json")
 
-		m := model.Message{}
-		err := json.Unmarshal(body, &m)
+		m := message{}
+		err = json.Unmarshal(body, &m)
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
-		text := s.messagesService.EchoJSON(m)
-		echo, err = json.Marshal(response{
+		text := s.messagesService.EchoJSON(m.Message)
+		echo, err = json.Marshal(message{
 			Message: text,
 		})
 		if err != nil {
