@@ -31,5 +31,7 @@ func (s *MessagesServer) PostMessage(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	w.Write(bytes)
+	if _, err = w.Write(bytes); err != nil {
+		log.Println("PostMessage Write err:", err.Error())
+	}
 }

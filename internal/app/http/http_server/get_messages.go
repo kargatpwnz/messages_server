@@ -9,7 +9,7 @@ import (
 func (s *MessagesServer) GetMessages(w http.ResponseWriter, r *http.Request) {
 	msgs := s.messagesService.GetMessages()
 	if err := json.NewEncoder(w).Encode(msgs); err != nil {
-		log.Println("GetMessages: Encode err ", err.Error())
+		log.Println("GetMessages: Encoder err:", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }

@@ -49,5 +49,7 @@ func (s *MessagesServer) Echo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write(echo)
+	if _, err = w.Write(echo); err != nil {
+		log.Println("Echo Write err:", err.Error())
+	}
 }
