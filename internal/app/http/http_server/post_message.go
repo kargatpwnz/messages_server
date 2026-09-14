@@ -7,19 +7,23 @@ import (
 	"net/http"
 )
 
+type postRequest struct {
+	Message string `json:"message"`
+}
+
 func (s *MessagesServer) PostMessage(w http.ResponseWriter, r *http.Request) {
 	var err error
-	m := model.Message{}
-	if err = json.NewDecoder(r.Body).Decode(&m); err != nil || len(m.Message) == 0 { // use validation pkg
+	req := postRequest{}
+	if err = json.NewDecoder(r.Body).Decode(&req); err != nil || len(req.Message) == 0 { // use validation pkg
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	idx, createdAt := s.messagesService.PostMessage(m)
+	id, createdAt := s.messagesService.PostMessage(req.Message)
 	rsp := model.Message{
-		ID:        idx,
+		ID:        id,
 		CreatedAt: createdAt,
-		Message:   m.Message,
+		Message:   req.Message,
 	}
 
 	bytes, err := json.Marshal(rsp)
